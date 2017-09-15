@@ -21,6 +21,7 @@ You can find the most recent version of this guide [here](https://github.com/fac
 - [Changing the Page `<title>`](#changing-the-page-title)
 - [Installing a Dependency](#installing-a-dependency)
 - [Importing a Component](#importing-a-component)
+  - [Importing with absolute path](#importing-with-absolute-path)
 - [Code Splitting](#code-splitting)
 - [Adding a Stylesheet](#adding-a-stylesheet)
 - [Post-Processing CSS](#post-processing-css)
@@ -409,6 +410,56 @@ Learn more about ES6 modules:
 * [When to use the curly braces?](http://stackoverflow.com/questions/36795819/react-native-es-6-when-should-i-use-curly-braces-for-import/36796281#36796281)
 * [Exploring ES6: Modules](http://exploringjs.com/es6/ch_modules.html)
 * [Understanding ES6: Modules](https://leanpub.com/understandinges6/read#leanpub-auto-encapsulating-code-with-modules)
+
+### Importing with Absolute path
+
+You can configure module resolver using `NODE_SRC` environment variable. To use it, change the `start`, `build` and `test` commands in the package.json.
+
+```
+  "start": "cross-env NODE_PATH=./src react-scripts start",
+  "build": "cross-env NODE_PATH=./src react-scripts build",
+  "test": "cross-env NODE_PATH=./src react-scripts test --env=jsdom",
+```
+
+And install the cross-env:
+
+```
+npm install cross-env --save-dev
+```
+
+Then you will be able to import your components using absolute paths. If you want to add several paths, join them using the delimiter specific for your system (https://nodejs.org/docs/latest/api/path.html#path_path_delimiter)
+
+Update for the example above:
+
+### `src/components/Button.js`
+
+```js
+import React, { Component } from 'react';
+
+class Button extends Component {
+  render() {
+    // ...
+  }
+}
+
+export default Button; // Don’t forget to use export default!
+```
+
+### `src/components/DangerButton.js`
+
+
+```js
+import React, { Component } from 'react';
+import Button from 'components/Button'; // Import a component from another file
+
+class DangerButton extends Component {
+  render() {
+    return <Button color="red" />;
+  }
+}
+
+export default DangerButton;
+```
 
 ## Code Splitting
 
